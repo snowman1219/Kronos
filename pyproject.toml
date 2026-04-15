@@ -1,0 +1,144 @@
+[project]
+name = "kronos"
+version = "0.1.0"
+description = "Kronos - Stock Analysis Time Series Model"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "numpy",
+    "pandas==2.2.2",
+    "torch>=2.0.0",
+    "einops==0.8.1",
+    "huggingface_hub==0.33.1",
+    "matplotlib==3.9.3",
+    "tqdm==4.67.1",
+    "safetensors==0.6.2",
+    "flask==2.3.3",
+    "flask-cors==4.0.0",
+    "plotly==5.17.0",
+]
+
+[dependency-groups]
+dev = ["ruff", "pyright", "pytest", "pytest-cov"]
+lint = ["ruff", "pyright"]
+test = ["pytest", "pytest-cov"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["model"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+testpaths = ["tests"]
+python_files = ["packages/**/test_*.py"]
+asyncio_mode = "auto"
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+]
+
+
+[tool.pyright]
+exclude = [
+    "**/.venv",
+    "tmp/",
+    "**/__pycache__",
+    "**/*.pyc",
+    "notebooks/",
+]
+typeCheckingMode = "basic"
+pythonVersion = "3.14"
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = 'py314'
+exclude = [
+    ".venv",
+    "notebooks/*",
+]
+
+
+[tool.ruff.lint]
+select = ["ALL"]
+extend-per-file-ignores = { "**/__init__.py" = [
+    "I",
+    "F403",
+]}
+ignore = [
+    "TD003",
+    "FIX002",
+    "ARG002",
+    "A005",
+    "D100",
+    "D101",    # 後で解除してドキュメントを書く
+    "D102",
+    "D103",    # 後で解除してドキュメントを書く
+    "D104",    # 後で解除してドキュメントを書く
+    "D105",    # 後で解除してドキュメントを書く
+    "D107",    # 後で解除してドキュメントを書く
+    "D400",
+    "D415",
+    "D203",
+    "D213",
+    "PLR0913",
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "EM101",
+    "D206",
+    "D300",
+    "G004",
+    "Q000",
+    "Q001",
+    "Q002",
+    "Q003",
+    "COM812",
+    "COM819",
+    "ISC001",
+    "ISC002",
+    "TC001",
+    "TC002",
+    "S101",
+    "ANN201",
+    "INP001",
+    "ERA001",
+    "TRY003",
+    "EM102",
+    "DTZ005",  # TZが関係あるのなら解除するべき
+    "PT011",
+    "ARG003",
+    "FBT",
+    "RUF",
+    "D205",
+    "D417",
+    "PLR2004",
+    "TC003",
+    "PERF102",
+    "PYI034",
+    "RET504",
+]
+exclude = ["target", "tmp", "data", "notebooks"]
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel", "pydantic_settings.BaseSettings"]
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
